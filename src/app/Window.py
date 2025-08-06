@@ -5,15 +5,19 @@ class Window:
     
     def __init__(self):
         self.window = self.__create() # create a window
-        self.__options()
-        Worker()
+        self.__window_options()
+        Worker(self.window)
     
     @staticmethod
     def __create():
-        window = webdriver.Chrome()
+        options = webdriver.ChromeOptions()
+        options.add_argument('--incognito')
+        # options.add_argument("--headless=new")
+        options.add_argument("--disable-gpu")
+        window = webdriver.Chrome(options=options)
         return window
     
-    def __options(self):
+    def __window_options(self):
         self.window.maximize_window()
         # more options
         
