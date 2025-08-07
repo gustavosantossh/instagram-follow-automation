@@ -36,11 +36,11 @@ class CreateAccountInstagram:
         
         fullName_input = wait.until(EC.element_to_be_clickable((By.XPATH, "//input[@name = 'fullName']")))
         fullName_input.clear()
-        fullName_input.send_keys(Config.ACC_FULLNAME + " " + Core.randomToken())
+        fullName_input.send_keys(Config.ACC_FULLNAME_PREFIX + " " + Core.randomToken())
         
         username_input = wait.until(EC.element_to_be_clickable((By.XPATH, "//input[@name = 'username']")))
         username_input.clear()
-        username_input.send_keys(Config.ACC_USERNAME + "_" + Core.randomToken())
+        username_input.send_keys(Config.ACC_USERNAME_PREFIX + "_" + Core.randomToken())
         
         wait.until(lambda driver: driver.find_element(By.XPATH, "//button[@type = 'submit']").is_enabled())
         

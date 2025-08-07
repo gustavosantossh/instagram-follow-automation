@@ -20,7 +20,7 @@ class Mail:
         random_mail_address = Config.ACC_EMAIL_PREFIX + Core.randomToken()
 
         email = random_mail_address + "@" + domain
-        password = Config.ACC_PASSWORD + "_" + Core.randomToken()
+        password = Config.ACC_PASSWORD_PREFIX + "_" + Core.randomToken()
 
         response = requests.post('https://api.mail.tm/accounts', json={
             "address": email,
