@@ -3,11 +3,11 @@
 > [!CAUTION]
 > ```This tool is intended for educational purposes only, and we are not responsible for any misuse of the code!```
 
-# REQUIREMENTS
+## REQUIREMENTS
 
 - Python installed
 
-# HOW TO USE
+## HOW TO USE
 
 ```
 git clone https://github.com/gustavosantossh/instagram-follow-automation
