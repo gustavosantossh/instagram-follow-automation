@@ -3,20 +3,22 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support import expected_conditions as EC
-import time
+from src.app.config.Config import Config
+from src.app.helper.Core import Core
+from src.app.services.Mail import Mail
 import random
 
 class CreateAccountInstagram:
     
-    def __init__(self, window: WebDriver):
-        self.run(window)
+    def __init__(self, window: WebDriver, credential: dict):
+        self.__run(window, credential)
     
     @classmethod
-    def run(self, window: WebDriver):
-        CreateAccountInstagram.create_account(window)
+    def __run(self, window: WebDriver, credential: dict):
+        self.__create_account(window, credential)
     
     @classmethod
-    def create_account(self, window: WebDriver):
+    def __create_account(self, window: WebDriver, credential: dict):
         window.get('https://www.instagram.com/')
         
         wait = WebDriverWait(window, 100)
@@ -26,19 +28,19 @@ class CreateAccountInstagram:
         
         email_input = wait.until(EC.element_to_be_clickable((By.XPATH, "//input[@name = 'emailOrPhone']")))
         email_input.clear()
-        email_input.send_keys("kerrine778s43timated@somoj.com")
+        email_input.send_keys(credential['mail'])
         
         password_input = wait.until(EC.element_to_be_clickable((By.XPATH, "//input[@name = 'password']")))
         password_input.clear()
-        password_input.send_keys("teste1234")
+        password_input.send_keys(credential['password'])
         
         fullName_input = wait.until(EC.element_to_be_clickable((By.XPATH, "//input[@name = 'fullName']")))
         fullName_input.clear()
-        fullName_input.send_keys("gfjhsffsd fsdf")
+        fullName_input.send_keys(Config.ACC_FULLNAME + " " + Core.randomToken())
         
         username_input = wait.until(EC.element_to_be_clickable((By.XPATH, "//input[@name = 'username']")))
         username_input.clear()
-        username_input.send_keys("Admin_username_aaabbcc546443")
+        username_input.send_keys(Config.ACC_USERNAME + "_" + Core.randomToken())
         
         wait.until(lambda driver: driver.find_element(By.XPATH, "//button[@type = 'submit']").is_enabled())
         
@@ -65,9 +67,15 @@ class CreateAccountInstagram:
         
         wait.until(lambda driver: driver.find_element(By.XPATH, "//button[contains(text(), 'Avançar')]").is_enabled())
         
-        next_button = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Avançar')]")))
-        next_button.click()
+        date_birth_next_button = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Avançar')]")))
+        date_birth_next_button.click()
         
-        time.sleep(25)
+        ig_code = Mail.getInstagramCode(credential['token'])
         
+        email_confirmation_code_input = wait.until(EC.element_to_be_clickable((By.XPATH, "//input[@name = 'email_confirmation_code']")))
+        email_confirmation_code_input.clear()
+        email_confirmation_code_input.send_keys(ig_code)
+        
+        code_confirm_button = wait.until(EC.element_to_be_clickable((By.XPATH, "//div[contains(text(), 'Avançar')]")))
+        code_confirm_button.click()
         

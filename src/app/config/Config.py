@@ -1,11 +1,11 @@
 class Config:
   
-    # Optional
+    # Optional (Random values if not filled)
     ACC_EMAIL_PREFIX = "" 
-    
-    # Required 
     ACC_PASSWORD = ""
-    ACC_NAME_PREFIX = ""
-    ACC_USERNAME_PREFIX = ""
+    ACC_FULLNAME = ""
+    ACC_USERNAME = ""
+    
+    # Required
     USER_TO_FOLLOW = ""
     

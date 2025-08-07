@@ -1,7 +1,8 @@
 import requests
-import random
 import json
+import time
 from src.app.config.Config import Config
+from src.app.helper.Core import Core
 
 
 class Mail:
@@ -13,19 +14,13 @@ class Mail:
         return domain
 
     @staticmethod
-    def randomMailAddress() -> str:
-        hex_chars = '0123456789abcdef'
-        chars = [random.choice(hex_chars) for _ in range(12)]
-        return Config.ACC_EMAIL_PREFIX + "".join(chars)
-
-    @staticmethod
     def createMailAccount() -> dict[str, str]:
         
         domain = Mail.getDomain()
-        random_mail_address = Mail.randomMailAddress()
+        random_mail_address = Config.ACC_EMAIL_PREFIX + Core.randomToken()
 
         email = random_mail_address + "@" + domain
-        password = Config.ACC_PASSWORD
+        password = Config.ACC_PASSWORD + "_" + Core.randomToken()
 
         response = requests.post('https://api.mail.tm/accounts', json={
             "address": email,
@@ -74,23 +69,41 @@ class Mail:
 
 
     @staticmethod
-    def getMessages(email):
+    def __getMessages(acc_token):
+        # with open('./src/log/accounts.json', 'r') as f:
+        #     contas = json.load(f)
+
+        # conta = [x for x in contas if x.get('mail') == email]
+
+        # if not conta:
+        #     return False
+
+        # token = conta[0]['token']
         
-        with open('./src/log/accounts.json', 'r') as f:
-            contas = json.load(f)
-
-        conta = [x for x in contas if x.get('mail') == email]
-
-        if not conta:
-            return False
-
-        token = conta[0]['token']
-
+        
         response = requests.get('https://api.mail.tm/messages', headers={
-            "Authorization": f"Bearer {token}"
+            "Authorization": f"Bearer {acc_token}"
         })
 
         return response.json()
+    
+    @staticmethod
+    def getInstagramCode(acc_token, attempts=10, delay=3) -> str:
+        
+        for attempt in range(attempts):
+            try:
+                response = Mail.__getMessages(acc_token)
+                
+                if (response and response.get('hydra:member')):
+                    members = response['hydra:member']
+                    
+                    if members:
+                        subject = str(members[0].get('subject', ''))
+                        return subject[:6]
+                    
+                time.sleep(delay)
+            except:
+                raise Exception("Unable to get Instagram code after several attempts.")
     
     @staticmethod
     def deleteAccount(id) -> bool:
@@ -100,8 +113,3 @@ class Mail:
             return True
         
         return False
-
-
-print(
-    Mail.createMailAccount()
-)
