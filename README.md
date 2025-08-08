@@ -17,7 +17,7 @@ cd ./instagram-follow-automation
 
 After cloning the repository, change the Config.py class to the data of your preferences. (src/app/config/Config.py)
 
-```
+```python
 class Config:
 
     # Optional (Random values if not filled)
@@ -32,7 +32,7 @@ class Config:
 
 **Accounts will be generated automatically with random email, using the designated prefixes** 
 
-```
+```python
 email -> ACC_EMAIL_PREFIX + random token + domain
 password -> ACC_PASSWORD_PREFIX + "_" + random token
 fullname -> ACC_FULLNAME_PREFIX + random token
@@ -43,7 +43,7 @@ username -> ACC_USERNAME_PREFIX + "_" + random token
 
 In src/app/Window.py:
 
-```
+```python
 @staticmethod
     def __create():
         # proxy = "your_proxy_here"
